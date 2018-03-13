@@ -1,0 +1,34 @@
+{
+  "blockchain":
+  {
+    "Contract miniDAO 0":
+    {
+      "address": "ox123",
+
+      "userBalances":
+      {
+        "oy123": 100,
+        "oz123": 200
+      },
+      "balance": 10000
+    },
+    "Contract attacker 1":
+    {
+      "address": "oy123",
+      "balance": 200
+    },
+    "Contract attacker 2":
+    {
+      "address": "oz123",
+      "balance": 300
+    }
+  },
+
+  "transactions":
+  {
+    "transaction 1":
+    {
+      "code": "attacker1.dao=miniDAO0; Globals.msg.receiver=attacker1; attacker1.incr();"
+    }
+  }
+}

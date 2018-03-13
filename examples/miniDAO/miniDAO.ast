@@ -1,0 +1,261 @@
+Syntax trees:
+
+
+======= attacker.sol =======
+PragmaDirective
+   Gas costs: 0
+   Source: "pragma solidity 0.4.18;"
+ImportDirective "miniDAO.sol"
+   Gas costs: 0
+   Source: "import \"miniDAO.sol\";"
+ContractDefinition "attacker"
+   Source: "contract attacker\n{\n  miniDAO dao;\n\n  function incr() \n  { \n    dao.withdrawBalance();\n  }\n\n  function()\n  {\n    incr();\n  }\n}"
+  VariableDeclaration "dao"
+     Type: contract miniDAO
+     Gas costs: 0
+     Source: "miniDAO dao"
+    UserDefinedTypeName "miniDAO"
+       Source: "miniDAO"
+  FunctionDefinition "incr" - public
+     Source: "function incr() \n  { \n    dao.withdrawBalance();\n  }"
+    ParameterList
+       Gas costs: 0
+       Source: "()"
+    ParameterList
+       Gas costs: 0
+       Source: ""
+    Block
+       Source: "{ \n    dao.withdrawBalance();\n  }"
+      ExpressionStatement
+         Gas costs: 0
+         Source: "dao.withdrawBalance()"
+        FunctionCall
+           Type: tuple()
+           Source: "dao.withdrawBalance()"
+          MemberAccess to member withdrawBalance
+             Type: function () external
+             Source: "dao.withdrawBalance"
+            Identifier dao
+               Type: contract miniDAO
+               Source: "dao"
+  FunctionDefinition "" - public
+     Source: "function()\n  {\n    incr();\n  }"
+    ParameterList
+       Gas costs: 0
+       Source: "()"
+    ParameterList
+       Gas costs: 0
+       Source: ""
+    Block
+       Source: "{\n    incr();\n  }"
+      ExpressionStatement
+         Gas costs: 0
+         Source: "incr()"
+        FunctionCall
+           Type: tuple()
+           Source: "incr()"
+          Identifier incr
+             Type: function ()
+             Source: "incr"
+
+======= miniDAO.sol =======
+PragmaDirective
+   Gas costs: 0
+   Source: "pragma solidity 0.4.18;"
+ContractDefinition "miniDAO"
+   Source: "contract miniDAO\n{\n  mapping (address => uint) userBalances;\n\n  function getBalance(address u)\n  {\n     userBalances[msg.sender]+=msg.value;\n  }\n\n  function withdrawBalance()\n  {\n\n    uint old_balance=this.balance;\n    uint delta=userBalances[msg.sender];\n   \n    msg.sender.call.value(userBalances[msg.sender])();\n    userBalances[msg.sender]=0;\n    \n    // post-condition\n    assert(old_balance-this.balance==delta);\n    assert(this.balance>=0);\n  }\n\n}"
+  VariableDeclaration "userBalances"
+     Type: mapping(address => uint256)
+     Gas costs: 0
+     Source: "mapping (address => uint) userBalances"
+    Mapping
+       Source: "mapping (address => uint)"
+      ElementaryTypeName address
+         Source: "address"
+      ElementaryTypeName uint
+         Source: "uint"
+  FunctionDefinition "getBalance" - public
+     Source: "function getBalance(address u)\n  {\n     userBalances[msg.sender]+=msg.value;\n  }"
+    ParameterList
+       Gas costs: 0
+       Source: "(address u)"
+      VariableDeclaration "u"
+         Type: address
+         Source: "address u"
+        ElementaryTypeName address
+           Source: "address"
+    ParameterList
+       Gas costs: 0
+       Source: ""
+    Block
+       Source: "{\n     userBalances[msg.sender]+=msg.value;\n  }"
+      ExpressionStatement
+         Gas costs: 20327
+         Source: "userBalances[msg.sender]+=msg.value"
+        Assignment using operator +=
+           Type: uint256
+           Source: "userBalances[msg.sender]+=msg.value"
+          IndexAccess
+             Type: uint256
+             Source: "userBalances[msg.sender]"
+            Identifier userBalances
+               Type: mapping(address => uint256)
+               Source: "userBalances"
+            MemberAccess to member sender
+               Type: address
+               Source: "msg.sender"
+              Identifier msg
+                 Type: msg
+                 Source: "msg"
+          MemberAccess to member value
+             Type: uint256
+             Source: "msg.value"
+            Identifier msg
+               Type: msg
+               Source: "msg"
+  FunctionDefinition "withdrawBalance" - public
+     Source: "function withdrawBalance()\n  {\n\n    uint old_balance=this.balance;\n    uint delta=userBalances[msg.sender];\n   \n    msg.sender.call.value(userBalances[msg.sender])();\n    userBalances[msg.sender]=0;\n    \n    // post-condition\n    assert(old_balance-this.balance==delta);\n    assert(this.balance>=0);\n  }"
+    ParameterList
+       Gas costs: 0
+       Source: "()"
+    ParameterList
+       Gas costs: 0
+       Source: ""
+    Block
+       Source: "{\n\n    uint old_balance=this.balance;\n    uint delta=userBalances[msg.sender];\n   \n    msg.sender.call.value(userBalances[msg.sender])();\n    userBalances[msg.sender]=0;\n    \n    // post-condition\n    assert(old_balance-this.balance==delta);\n    assert(this.balance>=0);\n  }"
+      VariableDeclarationStatement
+         Gas costs: 416
+         Source: "uint old_balance=this.balance"
+        VariableDeclaration "old_balance"
+           Type: uint256
+           Source: "uint old_balance"
+          ElementaryTypeName uint
+             Source: "uint"
+        MemberAccess to member balance
+           Type: uint256
+           Source: "this.balance"
+          Identifier this
+             Type: contract miniDAO
+             Source: "this"
+      VariableDeclarationStatement
+         Gas costs: 306
+         Source: "uint delta=userBalances[msg.sender]"
+        VariableDeclaration "delta"
+           Type: uint256
+           Source: "uint delta"
+          ElementaryTypeName uint
+             Source: "uint"
+        IndexAccess
+           Type: uint256
+           Source: "userBalances[msg.sender]"
+          Identifier userBalances
+             Type: mapping(address => uint256)
+             Source: "userBalances"
+          MemberAccess to member sender
+             Type: address
+             Source: "msg.sender"
+            Identifier msg
+               Type: msg
+               Source: "msg"
+      ExpressionStatement
+         Gas costs: [???]
+         Source: "msg.sender.call.value(userBalances[msg.sender])()"
+        FunctionCall
+           Type: bool
+           Source: "msg.sender.call.value(userBalances[msg.sender])()"
+          FunctionCall
+             Type: function () payable returns (bool)
+             Source: "msg.sender.call.value(userBalances[msg.sender])"
+            MemberAccess to member value
+               Type: function (uint256) returns (function () payable returns (bool))
+               Source: "msg.sender.call.value"
+              MemberAccess to member call
+                 Type: function () payable returns (bool)
+                 Source: "msg.sender.call"
+                MemberAccess to member sender
+                   Type: address
+                   Source: "msg.sender"
+                  Identifier msg
+                     Type: msg
+                     Source: "msg"
+            IndexAccess
+               Type: uint256
+               Source: "userBalances[msg.sender]"
+              Identifier userBalances
+                 Type: mapping(address => uint256)
+                 Source: "userBalances"
+              MemberAccess to member sender
+                 Type: address
+                 Source: "msg.sender"
+                Identifier msg
+                   Type: msg
+                   Source: "msg"
+      ExpressionStatement
+         Gas costs: 5103
+         Source: "userBalances[msg.sender]=0"
+        Assignment using operator =
+           Type: uint256
+           Source: "userBalances[msg.sender]=0"
+          IndexAccess
+             Type: uint256
+             Source: "userBalances[msg.sender]"
+            Identifier userBalances
+               Type: mapping(address => uint256)
+               Source: "userBalances"
+            MemberAccess to member sender
+               Type: address
+               Source: "msg.sender"
+              Identifier msg
+                 Type: msg
+                 Source: "msg"
+          Literal, token: [no token] value: 0
+             Type: int_const 0
+             Source: "0"
+      ExpressionStatement
+         Gas costs: 440
+         Source: "assert(old_balance-this.balance==delta)"
+        FunctionCall
+           Type: tuple()
+           Source: "assert(old_balance-this.balance==delta)"
+          Identifier assert
+             Type: function (bool) pure
+             Source: "assert"
+          BinaryOperation using operator ==
+             Type: bool
+             Source: "old_balance-this.balance==delta"
+            BinaryOperation using operator -
+               Type: uint256
+               Source: "old_balance-this.balance"
+              Identifier old_balance
+                 Type: uint256
+                 Source: "old_balance"
+              MemberAccess to member balance
+                 Type: uint256
+                 Source: "this.balance"
+                Identifier this
+                   Type: contract miniDAO
+                   Source: "this"
+            Identifier delta
+               Type: uint256
+               Source: "delta"
+      ExpressionStatement
+         Gas costs: 437
+         Source: "assert(this.balance>=0)"
+        FunctionCall
+           Type: tuple()
+           Source: "assert(this.balance>=0)"
+          Identifier assert
+             Type: function (bool) pure
+             Source: "assert"
+          BinaryOperation using operator >=
+             Type: bool
+             Source: "this.balance>=0"
+            MemberAccess to member balance
+               Type: uint256
+               Source: "this.balance"
+              Identifier this
+                 Type: contract miniDAO
+                 Source: "this"
+            Literal, token: [no token] value: 0
+               Type: int_const 0
+               Source: "0"

@@ -1,0 +1,5 @@
+This is one minimal example to show the DAO attack
+
+Command to run:
+
+  python ../../src/scbmc.py miniDAO.ast --config blockchain.txt --unwind 4 --solver ../../solvers/jbmc
